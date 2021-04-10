@@ -52,7 +52,7 @@ uint32_t UART1_RX_Callback(User_context_TypeDef* user_context){
 		return 0;
 	}
 	
-	UART_ReceiveBytes(UART1, user_context->doubleBuffer[toggle].data, UART_BLOCK_SIZE, (UART_Callback_TypeDef)UART1_RX_Callback, user_context);
+	UART_ReceiveBytes(UART1, user_context->double_buffer[toggle].data, UART_BLOCK_SIZE, (UART_Callback_TypeDef)UART1_RX_Callback, user_context);
 	
 	return 0;
 }
@@ -74,7 +74,7 @@ int main(){
 }
 
 static void UART1_Init(){
-	UART_InitTypeDef UART_InitStructure;
+	UART_Init_TypeDef UART_InitStructure;
 	int32_t sts;
 	
 	UART_InitStructure.UART_BaudRate = 9600;
@@ -92,7 +92,7 @@ static void UART1_Init(){
 }
 
 static void UART2_Init(){
-	UART_InitTypeDef UART_InitStructure;
+	UART_Init_TypeDef UART_InitStructure;
 	int sts;
 	
 	UART_InitStructure.UART_BaudRate = 115200;

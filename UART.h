@@ -36,8 +36,8 @@ extern "C" {
 #define UART_MessageQueue_Length (10)
 
 
-typedef uint32_t (* UART_Callback_TypeDef)(void* user_context);
-typedef uint32_t (* UART_Handler_TypeDef)(uint32_t UARTn, void* argument, uint32_t len, UART_Callback_TypeDef callback, void* user_context);
+typedef uint32_t (*UART_Callback_TypeDef)(void* user_context);
+typedef uint32_t (*UART_Handler_TypeDef)(uint32_t UARTn, void* argument, uint32_t len, UART_Callback_TypeDef callback, void* user_context);
 
 typedef enum{
 	UART1,
@@ -63,7 +63,7 @@ typedef struct{
 }UART_MessageQueue_TypeDef;
 
 typedef struct{
-	UART_TypeDef *UARTx;		// Pointer to device registers in periphery memory region
+	UART_TypeDef* UARTx;		// Pointer to device registers in periphery memory region
 	
 	UART_MessageQueue_TypeDef RX;
 	UART_MessageQueue_TypeDef TX;
@@ -76,7 +76,7 @@ typedef struct{
   uint16_t UART_Parity;
   uint16_t UART_FIFOMode;
   uint16_t UART_HardwareFlowControl;
-}UART_InitTypeDef;
+}UART_Init_TypeDef;
 
 
 extern UART_Context_TypeDef UART_Context[]; // Defined and initialized in UART.c
@@ -90,7 +90,7 @@ int32_t UART_ReceiveByte(UART_Num UARTn, void* addr, uint32_t len, UART_Callback
 
 void UART_SetCallback(UART_Num UARTn, UART_Callback_TypeDef callback, void* user_context);									// I prefer to pass user callback and context within transfer functions
 
-int32_t UART_Init(UART_Num UARTn, UART_InitTypeDef* Init);
+int32_t UART_Init(UART_Num UARTn, UART_Init_TypeDef* Init);
 
 #ifdef __cplusplus
 }
