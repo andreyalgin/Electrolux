@@ -52,6 +52,7 @@ typedef struct{
 	void* addr;
 	uint32_t len;
 	UART_Callback_TypeDef callback;
+	UART_Error_TypeDef error;
 	UART_Handler_TypeDef handler;	/*	Don't confuse it with interrupt handler or callback. It'll be called inside interrupt handler.
 										It stores function pointer to user initially called send/receive function 
 										to continue transmission with the same behaviour (for instance: UART_SendBytes or UART_SendByte)
