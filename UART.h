@@ -1,3 +1,7 @@
+/**
+	FILE UART.h
+*/
+
 #ifndef UART_
 #define UART_
 
@@ -38,7 +42,7 @@ extern "C" {
 
 /**
 	\brief Callback function pointer type definition
-	\param[in] user_context passed in UART callback setup functions
+	\param[in] user_context passed in UART callback set functions
 	\return 0 - success, -1 - error, error function will be called
 */
 typedef int32_t (*UART_Callback_TypeDef)(void* user_context);
@@ -50,7 +54,9 @@ typedef int32_t (*UART_Callback_TypeDef)(void* user_context);
 */
 typedef void (*UART_Error_TypeDef)(void* user_context);
 
-///UART context enumeration
+/**
+	\brief UART context enumeration
+*/
 typedef enum{
 	UART1,		///< UART1 context index
 	UART2,		///< UART2 context index
@@ -59,13 +65,24 @@ typedef enum{
 	UART_COUNT 	///< Total number of UARTs
 }UART_Num;
 
+/**
+	\brief  UART Init Structure type definition
+*/
 typedef struct{
-  uint32_t UART_BaudRate; 
-  uint16_t UART_WordLength;
-  uint16_t UART_StopBits;
-  uint16_t UART_Parity;
-  uint16_t UART_FIFOMode;
-  uint16_t UART_HardwareFlowControl;
+  uint32_t UART_BaudRate;				/**<	This member configures the UART communication baud rate.
+												The baud rate is computed using the following formula:
+												- IntegerDivider = ((UARTCLK) / (16 * (UART_InitStruct->UART_BaudRate)))
+												- FractionalDivider = ((IntegerDivider - (IntegerDivider)) * 64) + 0.5 */
+  uint16_t UART_WordLength;				/**<	Specifies the number of data bits transmitted or received in a frame.
+												This parameter is one of UART_Word_Length values. */
+  uint16_t UART_StopBits;				/**<	Specifies the number of stop bits transmitted.
+												This parameter is one of UART_Stop_Bits values. */
+  uint16_t UART_Parity;					/**<	Specifies the parity mode.
+												This parameter is one of UART_Parity values. */
+  uint16_t UART_FIFOMode;				/**<	Specifies the FIFO mode.
+												This parameter is one of UART_FIFO_Mode values. */
+  uint16_t UART_HardwareFlowControl;	/**<	Specifies whether the hardware flow control mode is enabled or disabled.
+												This parameter is one of UART_Hardware_Flow_Control values. */
 }UART_Init_TypeDef;
 
 
@@ -75,9 +92,9 @@ typedef struct{
 	\param[in] UARTn
 						UART context index
 	\param[in] addr
-						byte sequence start address
+						Byte sequence start address
 	\param[in] len
-						byte sequence length
+						Byte sequence length
 	\return 0 - success, -1 - error, message queue is full
 */
 int32_t UART_SendBytes(UART_Num UARTn, void* addr, uint32_t len);		// Non-blocking. It has internal message queue. Returns error if message queue is full.
@@ -88,9 +105,9 @@ int32_t UART_SendBytes(UART_Num UARTn, void* addr, uint32_t len);		// Non-blocki
 	\param[in] UARTn
 						UART context index
 	\param[in] addr
-						byte address
+						Byte address
 	\param[in] len
-						byte sequence length
+						Byte sequence length
 	\return 0 - success, -1 - error, message queue is full
 */
 int32_t UART_SendByte(UART_Num UARTn, void* addr, uint32_t len);		// Optionally. I also added separate function to send repeating sequence of the same bytes
@@ -101,9 +118,9 @@ int32_t UART_SendByte(UART_Num UARTn, void* addr, uint32_t len);		// Optionally.
 	\param[in] UARTn
 						UART context index
 	\param[in] addr
-						receiving buffer address
+						Receiving buffer address
 	\param[in] len
-						byte sequence length
+						Byte sequence length
 	\return 0 - success, -1 - error, message queue is full
 */
 int32_t UART_ReceiveBytes(UART_Num UARTn, void* addr, uint32_t len);
@@ -114,15 +131,15 @@ int32_t UART_ReceiveBytes(UART_Num UARTn, void* addr, uint32_t len);
 	\param[in] UARTn
 						UART context index
 	\param[in] addr
-						receiving buffer address
+						Receiving buffer address
 	\param[in] len
-						byte sequence length
+						Byte sequence length
 	\return 0 - success, -1 - error, message queue is full
 */
 int32_t UART_ReceiveByte(UART_Num UARTn, void* addr, uint32_t len);
 
 /**
-	\brief Setups user callback and error functions for output transactions passing user context pointer to it
+	\brief Sets user callback and error functions for output transactions passing user context pointer to it
 	\warning Library doesn't care about user context pointer content
 	\param[in] UARTn UART context index
 	\param[in] callback user callback function pointer
@@ -133,7 +150,7 @@ int32_t UART_ReceiveByte(UART_Num UARTn, void* addr, uint32_t len);
 void UART_Set_TX_Callback(UART_Num UARTn, UART_Callback_TypeDef callback, UART_Error_TypeDef error, void* user_context);
 
 /**
-	\brief Setups user callback and error functions for input transactions passing user context pointer to it
+	\brief Sets user callback and error functions for input transactions passing user context pointer to it
 	\warning Library doesn't care about user context pointer content
 	\param[in] UARTn UART context index
 	\param[in] callback user callback function pointer

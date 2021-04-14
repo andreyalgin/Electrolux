@@ -1,3 +1,6 @@
+/**
+	FILE main.c
+*/
 
 #include "UART.h"
 #include "UART_Bridge.h"
@@ -76,6 +79,7 @@ int main(){
 		Debug("UART3_SendBytes error\n");
 	}
 	
+	// Data validation
 	sts = Data_Compare(User_context.out_data, User_context.in_data, UART_BRIDGE_DATA_LENGTH);
 	
 	if(sts < 0){
@@ -118,6 +122,7 @@ int main(){
 		Debug("UART3_SendBytes error\n");
 	}
 	
+	// Data validation
 	sts = Data_Compare(User_context.out_data, User_context.in_data, UART_BRIDGE_DATA_LENGTH);
 	
 	if(sts < 0){
