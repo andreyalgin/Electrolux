@@ -76,7 +76,7 @@ int main(){
 		Debug("UART3_SendBytes error\n");
 	}
 	
-	sts = Data_Compare(User_context.in_data, User_context.out_data, UART_BRIDGE_DATA_LENGTH);
+	sts = Data_Compare(User_context.out_data, User_context.in_data, UART_BRIDGE_DATA_LENGTH);
 	
 	if(sts < 0){
 		Debug("Data_Compare error\n");
@@ -118,7 +118,7 @@ int main(){
 		Debug("UART3_SendBytes error\n");
 	}
 	
-	sts = Data_Compare(User_context.in_data, User_context.out_data, UART_BRIDGE_DATA_LENGTH);
+	sts = Data_Compare(User_context.out_data, User_context.in_data, UART_BRIDGE_DATA_LENGTH);
 	
 	if(sts < 0){
 		Debug("Data_Compare error\n");

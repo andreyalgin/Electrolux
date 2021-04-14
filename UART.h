@@ -36,42 +36,28 @@ extern "C" {
 #define UART_MESSAGE_QUEUE_LENGTH (10)
 
 
-typedef int32_t (*UART_Callback_TypeDef)(void* user_context);
-typedef void (*UART_Error_TypeDef)(void* user_context);
-typedef int32_t (*UART_Handler_TypeDef)(uint32_t UARTn, void* argument, uint32_t len);
-
-typedef enum{
-	UART1,
-	UART2,
-	UART3,
-	UART4,
-	UART_COUNT
-}UART_Num;
-
-/*
-typedef struct{
-	void* addr;
-	uint32_t len;
-	UART_Callback_TypeDef callback;
-	UART_Error_TypeDef error;
-	UART_Handler_TypeDef handler;
-}UART_Message_TypeDef;
-
-typedef struct{
-	uint32_t current;	// Current message index in circle message queue
-	uint32_t last;		// Last message index in circle message queue
-
-	UART_Message_TypeDef message[UART_MESSAGE_QUEUE_LENGTH];
-}UART_MessageQueue_TypeDef;
-
-
-typedef struct{
-	UART_TypeDef* UARTx;		// Pointer to device registers in periphery memory region
-	
-	UART_MessageQueue_TypeDef RX;
-	UART_MessageQueue_TypeDef TX;
-}UART_Context_TypeDef;
+/**
+	\brief Callback function pointer type definition
+	\param[in] user_context passed in UART callback setup functions
+	\return 0 - success, -1 - error, error function will be called
 */
+typedef int32_t (*UART_Callback_TypeDef)(void* user_context);
+
+/**
+	\brief Error function type definition
+	\param[in] user_context passed in UART callback setup functions
+	\return void
+*/
+typedef void (*UART_Error_TypeDef)(void* user_context);
+
+///UART context enumeration
+typedef enum{
+	UART1,		///< UART1 context index
+	UART2,		///< UART2 context index
+	UART3,		///< UART3 context index
+	UART4,		///< UART4 context index
+	UART_COUNT 	///< Total number of UARTs
+}UART_Num;
 
 typedef struct{
   uint32_t UART_BaudRate; 
@@ -83,17 +69,86 @@ typedef struct{
 }UART_Init_TypeDef;
 
 
-// extern UART_Context_TypeDef UART_Context[]; // Defined and initialized in UART.c
-
+/**
+	\brief Sends continuous sequence of bytes. Non-blocking
+	\warning Internal message queue is limited by UART_MESSAGE_QUEUE_LENGTH
+	\param[in] UARTn
+						UART context index
+	\param[in] addr
+						byte sequence start address
+	\param[in] len
+						byte sequence length
+	\return 0 - success, -1 - error, message queue is full
+*/
 int32_t UART_SendBytes(UART_Num UARTn, void* addr, uint32_t len);		// Non-blocking. It has internal message queue. Returns error if message queue is full.
+
+/**
+	\brief Sends continuous sequence of repeating bytes. Non-blocking
+	\warning Internal message queue is limited by UART_MESSAGE_QUEUE_LENGTH
+	\param[in] UARTn
+						UART context index
+	\param[in] addr
+						byte address
+	\param[in] len
+						byte sequence length
+	\return 0 - success, -1 - error, message queue is full
+*/
 int32_t UART_SendByte(UART_Num UARTn, void* addr, uint32_t len);		// Optionally. I also added separate function to send repeating sequence of the same bytes
 
-int32_t UART_ReceiveBytes(UART_Num UARTn, void* addr, uint32_t len);	// Non-blocking. It has internal message queue. Returns error if message queue is full.
-int32_t UART_ReceiveByte(UART_Num UARTn, void* addr, uint32_t len);		// Optionally. I also added separate function to receive bytes to the same memory address (to skip it)
+/**
+	\brief Receives continuous sequence of bytes. Non-blocking
+	\warning Internal message queue is limited by UART_MESSAGE_QUEUE_LENGTH
+	\param[in] UARTn
+						UART context index
+	\param[in] addr
+						receiving buffer address
+	\param[in] len
+						byte sequence length
+	\return 0 - success, -1 - error, message queue is full
+*/
+int32_t UART_ReceiveBytes(UART_Num UARTn, void* addr, uint32_t len);
 
+/**
+	\brief Receives continuous sequence of bytes to the same memory address. Non-blocking
+	\warning Internal message queue is limited by UART_MESSAGE_QUEUE_LENGTH
+	\param[in] UARTn
+						UART context index
+	\param[in] addr
+						receiving buffer address
+	\param[in] len
+						byte sequence length
+	\return 0 - success, -1 - error, message queue is full
+*/
+int32_t UART_ReceiveByte(UART_Num UARTn, void* addr, uint32_t len);
+
+/**
+	\brief Setups user callback and error functions for output transactions passing user context pointer to it
+	\warning Library doesn't care about user context pointer content
+	\param[in] UARTn UART context index
+	\param[in] callback user callback function pointer
+	\param[in] error user error function pointer
+	\param[in] user_context pointer to user data
+	\return void
+*/
 void UART_Set_TX_Callback(UART_Num UARTn, UART_Callback_TypeDef callback, UART_Error_TypeDef error, void* user_context);
+
+/**
+	\brief Setups user callback and error functions for input transactions passing user context pointer to it
+	\warning Library doesn't care about user context pointer content
+	\param[in] UARTn UART context index
+	\param[in] callback user callback function pointer
+	\param[in] error user error function pointer
+	\param[in] user_context pointer to user data
+	\return void
+*/
 void UART_Set_RX_Callback(UART_Num UARTn, UART_Callback_TypeDef callback, UART_Error_TypeDef error, void* user_context);
 
+/**
+	\brief Initializes selected UART module
+	\param[in] UARTn UART context index
+	\param[in] Init UART initialization structure
+	\return 0 - success, -1 - error, can't initialize selected UART module
+*/
 int32_t UART_Init(UART_Num UARTn, UART_Init_TypeDef* Init);
 
 #ifdef __cplusplus
