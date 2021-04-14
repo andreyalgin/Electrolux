@@ -1,5 +1,5 @@
-#ifndef UART_
-#define UART_
+#ifndef UART_BRIDGE_
+#define UART_BRIDGE_
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,8 +33,8 @@ typedef struct{
 typedef struct{
 	Bridge_buffer_TypeDef double_buffer[2];
 	
-	UART_Num source;
-	UART_Num destination;
+	UART_Num input;
+	UART_Num output;
 	
 	uint32_t len;
 	uint32_t delta;
@@ -46,8 +46,9 @@ typedef struct{
 	uint8_t toggle;
 }Bridge_context_TypeDef;
 
-void UART_Bridge_Set_Callback(UART_Bridge_Callback_TypeDef callback, UART_Bridge_Error_TypeDef error, void* user_context);
-int32_t UART_Bridge(UART_Bridge_Num n, UART_Num source, UART_Num destination, uint32_t len);
+
+void UART_Bridge_Set_Callback(UART_Bridge_Num n, UART_Bridge_Callback_TypeDef callback, UART_Bridge_Error_TypeDef error, void* user_context);
+int32_t UART_Bridge(UART_Bridge_Num n, UART_Num input, UART_Num output, uint32_t len);
 
 #ifdef __cplusplus
 }

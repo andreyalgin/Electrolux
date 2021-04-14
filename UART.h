@@ -38,7 +38,7 @@ extern "C" {
 
 typedef int32_t (*UART_Callback_TypeDef)(void* user_context);
 typedef void (*UART_Error_TypeDef)(void* user_context);
-typedef int32_t (*UART_Handler_TypeDef)(uint32_t UARTn, void* argument, uint32_t len, UART_Callback_TypeDef callback, void* user_context);
+typedef int32_t (*UART_Handler_TypeDef)(uint32_t UARTn, void* argument, uint32_t len);
 
 typedef enum{
 	UART1,
@@ -48,15 +48,13 @@ typedef enum{
 	UART_COUNT
 }UART_Num;
 
+/*
 typedef struct{
 	void* addr;
 	uint32_t len;
 	UART_Callback_TypeDef callback;
 	UART_Error_TypeDef error;
-	UART_Handler_TypeDef handler;	/*	Don't confuse it with interrupt handler or callback. It'll be called inside interrupt handler.
-										It stores function pointer to user initially called send/receive function 
-										to continue transmission with the same behaviour (for instance: UART_SendBytes or UART_SendByte)
-									*/
+	UART_Handler_TypeDef handler;
 }UART_Message_TypeDef;
 
 typedef struct{
@@ -66,7 +64,7 @@ typedef struct{
 	UART_Message_TypeDef message[UART_MESSAGE_QUEUE_LENGTH];
 }UART_MessageQueue_TypeDef;
 
-/*
+
 typedef struct{
 	UART_TypeDef* UARTx;		// Pointer to device registers in periphery memory region
 	
@@ -87,18 +85,11 @@ typedef struct{
 
 // extern UART_Context_TypeDef UART_Context[]; // Defined and initialized in UART.c
 
+int32_t UART_SendBytes(UART_Num UARTn, void* addr, uint32_t len);		// Non-blocking. It has internal message queue. Returns error if message queue is full.
+int32_t UART_SendByte(UART_Num UARTn, void* addr, uint32_t len);		// Optionally. I also added separate function to send repeating sequence of the same bytes
 
-int32_t UART_SendBytes_Clbk(UART_Num UARTn, void* addr, uint32_t len, UART_Callback_TypeDef callback, void* user_context);		// Non-blocking. It has internal message queue. Returns error if message queue is full.
-int32_t UART_SendByte_Clbk(UART_Num UARTn, void* addr, uint32_t len, UART_Callback_TypeDef callback, void* user_context);		// Optionally. I also added separate function to send repeating sequence of the same bytes
-
-int32_t UART_ReceiveBytes_Clbk(UART_Num UARTn, void* addr, uint32_t len, UART_Callback_TypeDef callback, void* user_context);	// Non-blocking. It has internal message queue. Returns error if message queue is full.
-int32_t UART_ReceiveByte_Clbk(UART_Num UARTn, void* addr, uint32_t len, UART_Callback_TypeDef callback, void* user_context);	// Optionally. I also added separate function to receive bytes to the same memory address (to skip it)
-
-int32_t UART_SendBytes(UART_Num UARTn, void* addr, uint32_t len);																// Non-blocking. It has internal message queue. Returns error if message queue is full.
-int32_t UART_SendByte(UART_Num UARTn, void* addr, uint32_t len);																// Optionally. I also added separate function to send repeating sequence of the same bytes
-
-int32_t UART_ReceiveBytes(UART_Num UARTn, void* addr, uint32_t len);															// Non-blocking. It has internal message queue. Returns error if message queue is full.
-int32_t UART_ReceiveByte(UART_Num UARTn, void* addr, uint32_t len);																// Optionally. I also added separate function to receive bytes to the same memory address (to skip it)
+int32_t UART_ReceiveBytes(UART_Num UARTn, void* addr, uint32_t len);	// Non-blocking. It has internal message queue. Returns error if message queue is full.
+int32_t UART_ReceiveByte(UART_Num UARTn, void* addr, uint32_t len);		// Optionally. I also added separate function to receive bytes to the same memory address (to skip it)
 
 void UART_Set_TX_Callback(UART_Num UARTn, UART_Callback_TypeDef callback, UART_Error_TypeDef error, void* user_context);
 void UART_Set_RX_Callback(UART_Num UARTn, UART_Callback_TypeDef callback, UART_Error_TypeDef error, void* user_context);

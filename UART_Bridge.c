@@ -3,6 +3,18 @@
 
 static Bridge_context_TypeDef Bridge_context[UART_BRIDGE_COUNT];
 
+static void UART_RX_Error(Bridge_context_TypeDef* bridge_context){
+	if(bridge_context->error != NULL){
+		bridge_context->error(bridge_context->user_context);
+	}
+}
+
+static void UART_TX_Error(Bridge_context_TypeDef* bridge_context){
+	if(bridge_context->error != NULL){
+		bridge_context->error(bridge_context->user_context);
+	}
+}
+
 static int32_t UART_TX_Tail_Callback(Bridge_context_TypeDef* bridge_context){
 	
 	bridge_context->double_buffer[0].state = STATE_EMPTY;
@@ -32,13 +44,13 @@ static int32_t UART_RX_Callback(Bridge_context_TypeDef* bridge_context){
 	bridge_context->double_buffer[toggle].state = STATE_FULL;
 	
 	if(bridge_context->len == 0){
-		UART_Set_TX_Callback(bridge_context->destination, (UART_Callback_TypeDef)UART_TX_Tail_Callback, bridge_context->error, bridge_context);
+		UART_Set_TX_Callback(bridge_context->output, (UART_Callback_TypeDef)UART_TX_Tail_Callback, (UART_Error_TypeDef)UART_TX_Error, bridge_context);
 	}
 	
-	sts = UART_SendBytes(bridge_context->destination, user_context->double_buffer[toggle].data, bridge_context->delta);
+	sts = UART_SendBytes(bridge_context->output, user_context->double_buffer[toggle].data, bridge_context->delta);
 	
 	if(sts < 0){
-		return sts;
+		return sts; // UART_Bridge error
 	}
 	
 	toggle = !toggle;
@@ -54,40 +66,43 @@ static int32_t UART_RX_Callback(Bridge_context_TypeDef* bridge_context){
 		return 0;
 	}
 	
-	sts = UART_ReceiveBytes(bridge_context->source, bridge_context->double_buffer[toggle].data, bridge_context->delta);
+	sts = UART_ReceiveBytes(bridge_context->input, bridge_context->double_buffer[toggle].data, bridge_context->delta);
 	
 	if(sts < 0){
-		return sts;
+		return sts; // UART_Bridge error
 	}
 	
 	return 0;
 }
 
 
-void UART_Bridge_Set_Callback(UART_Bridge_Callback_TypeDef callback, UART_Bridge_Error_TypeDef error, void* user_context){
-	Bridge_context.callback = callback;
-	Bridge_context.error = error;
-	Bridge_context.user_context = user_context;
+void UART_Bridge_Set_Callback(UART_Bridge_Num n, UART_Bridge_Callback_TypeDef callback, UART_Bridge_Error_TypeDef error, void* user_context){
+	Bridge_context_TypeDef* bridge_context = &Bridge_context[n];
+	
+	bridge_context->callback = callback;
+	bridge_context->error = error;
+	bridge_context->user_context = user_context;
 }
 
-int32_t UART_Bridge(UART_Bridge_Num n, UART_Num source, UART_Num destination, uint32_t len){
+int32_t UART_Bridge(UART_Bridge_Num n, UART_Num input, UART_Num output, uint32_t len){
+	Bridge_context_TypeDef* bridge_context = &Bridge_context[n];
 	int32_t sts;
 
-	Bridge_context[n].double_buffer[0].state = STATE_EMPTY;
-	Bridge_context[n].double_buffer[1].state = STATE_EMPTY;
+	bridge_context->double_buffer[0].state = STATE_EMPTY;
+	bridge_context->double_buffer[1].state = STATE_EMPTY;
 	
-	Bridge_context[n].source = source;
-	Bridge_context[n].destination = destination;
+	bridge_context->input = input;
+	bridge_context->output = output;
 	
-	Bridge_context[n].len = len;
-	Bridge_context[n].delta = min(len, UART_BRIDGE_BLOCK_SIZE);
+	bridge_context->len = len;
+	bridge_context->delta = min(len, UART_BRIDGE_BLOCK_SIZE);
 	
-	Bridge_context[n].toggle = 0;
+	bridge_context->toggle = 0;
 	
-	UART_Set_TX_Callback(destination, (UART_Callback_TypeDef)UART_TX_Callback, error, &Bridge_context[n]);
+	UART_Set_TX_Callback(output, (UART_Callback_TypeDef)UART_TX_Callback, (UART_Error_TypeDef)UART_TX_Error, bridge_context);
 	
-	UART_Set_RX_Callback(source, (UART_Callback_TypeDef)UART_RX_Callback, error, &Bridge_context[n]);
-	sts = UART_ReceiveBytes(source, User_context[n].double_buffer[User_context.toggle].data, Bridge_context[n].delta);
+	UART_Set_RX_Callback(input, (UART_Callback_TypeDef)UART_RX_Callback, (UART_Error_TypeDef)UART_RX_Error, bridge_context);
+	sts = UART_ReceiveBytes(input, bridge_context->double_buffer[bridge_context->toggle].data, bridge_context->delta);
 	
 	return sts;
 }
