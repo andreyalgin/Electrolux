@@ -92,10 +92,10 @@ $(document).ready(function(){initNavTree('_u_a_r_t___bridge_8c.html',''); initRe
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a182ba80162c0964b52373e00aba86709"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_a_r_t___bridge_8c.html#a182ba80162c0964b52373e00aba86709">UART_Bridge_Set_Callback</a> (<a class="el" href="_u_a_r_t___bridge_8h.html#aae8cbb7c1f1d80e46219447e7b2b52d8">UART_Bridge_Num</a> n, <a class="el" href="_u_a_r_t___bridge_8h.html#a1b30c142ed1c20dca3bf480e0bd59e70">UART_Bridge_Callback_TypeDef</a> callback, <a class="el" href="_u_a_r_t___bridge_8h.html#ae992a783105908c07de60ed62ec426be">UART_Bridge_Error_TypeDef</a> error, void *user_context)</td></tr>
-<tr class="memdesc:a182ba80162c0964b52373e00aba86709"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setups user callback and error functions passing user context pointer to it.  <a href="_u_a_r_t___bridge_8c.html#a182ba80162c0964b52373e00aba86709">More...</a><br /></td></tr>
+<tr class="memdesc:a182ba80162c0964b52373e00aba86709"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets user callback and error functions passing user context pointer to it.  <a href="_u_a_r_t___bridge_8c.html#a182ba80162c0964b52373e00aba86709">More...</a><br /></td></tr>
 <tr class="separator:a182ba80162c0964b52373e00aba86709"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd193271834c2a90f2d7280c1a66825f"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_u_a_r_t___bridge_8c.html#afd193271834c2a90f2d7280c1a66825f">UART_Bridge</a> (<a class="el" href="_u_a_r_t___bridge_8h.html#aae8cbb7c1f1d80e46219447e7b2b52d8">UART_Bridge_Num</a> n, <a class="el" href="_u_a_r_t_8h.html#aa77a68fb1846ce6c61ed0eb0f6200596">UART_Num</a> input, <a class="el" href="_u_a_r_t_8h.html#aa77a68fb1846ce6c61ed0eb0f6200596">UART_Num</a> output, uint32_t len)</td></tr>
-<tr class="memdesc:afd193271834c2a90f2d7280c1a66825f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setups selected UART bridge module.  <a href="_u_a_r_t___bridge_8c.html#afd193271834c2a90f2d7280c1a66825f">More...</a><br /></td></tr>
+<tr class="memdesc:afd193271834c2a90f2d7280c1a66825f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts selected UART bridge module.  <a href="_u_a_r_t___bridge_8c.html#afd193271834c2a90f2d7280c1a66825f">More...</a><br /></td></tr>
 <tr class="separator:afd193271834c2a90f2d7280c1a66825f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -137,7 +137,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Setups selected UART bridge module. </p>
+<p>Starts selected UART bridge module. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>UART bridge context index </td></tr>
@@ -188,7 +188,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Setups user callback and error functions passing user context pointer to it. </p>
+<p>Sets user callback and error functions passing user context pointer to it. </p>
 <dl class="section warning"><dt>Warning</dt><dd>Library doesn't care about user context pointer content </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

@@ -87,7 +87,7 @@ typedef struct{
 void UART_Bridge_Set_Callback(UART_Bridge_Num n, UART_Bridge_Callback_TypeDef callback, UART_Bridge_Error_TypeDef error, void* user_context);
 
 /**
-	\brief Sets selected UART bridge module
+	\brief Starts selected UART bridge module
 	\param[in] n UART bridge context index
 	\param[in] input UART input module context index
 	\param[in] output UART output module context index

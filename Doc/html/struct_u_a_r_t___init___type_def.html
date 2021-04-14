@@ -88,6 +88,9 @@ $(document).ready(function(){initNavTree('struct_u_a_r_t___init___type_def.html'
 </div><!--header-->
 <div class="contents">
 
+<p>UART Init Structure type definition.  
+ <a href="struct_u_a_r_t___init___type_def.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_u_a_r_t_8h_source.html">UART.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -105,7 +108,9 @@ Data Fields</h2></td></tr>
 <tr class="memitem:a96248d672929dd97d852c94804ce8a9c"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_u_a_r_t___init___type_def.html#a96248d672929dd97d852c94804ce8a9c">UART_HardwareFlowControl</a></td></tr>
 <tr class="separator:a96248d672929dd97d852c94804ce8a9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Field Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>UART Init Structure type definition. </p>
+</div><h2 class="groupheader">Field Documentation</h2>
 <a id="aeba237f277062419bb0b984997d91c00"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeba237f277062419bb0b984997d91c00">&#9670;&nbsp;</a></span>UART_BaudRate</h2>
 
@@ -117,6 +122,10 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>This member configures the UART communication baud rate. The baud rate is computed using the following formula:</p><ul>
+<li>IntegerDivider = ((UARTCLK) / (16 * (UART_InitStruct-&gt;UART_BaudRate)))</li>
+<li>FractionalDivider = ((IntegerDivider - (IntegerDivider)) * 64) + 0.5 </li>
+</ul>
 
 </div>
 </div>
@@ -131,6 +140,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Specifies the FIFO mode. This parameter is one of UART_FIFO_Mode values. </p>
 
 </div>
 </div>
@@ -145,6 +155,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Specifies whether the hardware flow control mode is enabled or disabled. This parameter is one of UART_Hardware_Flow_Control values. </p>
 
 </div>
 </div>
@@ -159,6 +170,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Specifies the parity mode. This parameter is one of UART_Parity values. </p>
 
 </div>
 </div>
@@ -173,6 +185,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Specifies the number of stop bits transmitted. This parameter is one of UART_Stop_Bits values. </p>
 
 </div>
 </div>
@@ -187,6 +200,7 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Specifies the number of data bits transmitted or received in a frame. This parameter is one of UART_Word_Length values. </p>
 
 </div>
 </div>
